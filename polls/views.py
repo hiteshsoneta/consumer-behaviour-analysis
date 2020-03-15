@@ -4,6 +4,18 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 
+from django.http import JsonResponse
+from polls.models import Order
+from django.core import serializers
+
 def index(request):
     # return HttpResponse("Hello, world. You're at the polls index.")
     return render(request, "index.html")
+
+def dashboard_with_pivot(request):
+    return render(request, 'dashboard_with_pivot.html', {})
+
+def pivot_data(request):
+    dataset = Order.objects.all()
+    data = serializers.serialize('json', dataset)
+    return JsonResponse(data, safe=False)
