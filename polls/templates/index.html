@@ -12,7 +12,11 @@
       href="https://fonts.googleapis.com/css?family=Nunito:300,400,700"
       rel="stylesheet"
     />
-    {% load static %}
+    {% if messages %} {% for message in messages %}
+    <div class="alert alert-{{message.tags}}">
+      {{message}}
+    </div>
+    {% endfor %} {% endif %} {% load static %}
     <link rel="stylesheet" href="{% static 'fonts/icomoon/style.css' %}" />
 
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
@@ -81,9 +85,22 @@
                   class="site-menu main-menu js-clone-nav mr-auto d-none d-lg-block ml-0 pl-0"
                 >
                   <li><a href="#home-section" class="nav-link">Home</a></li>
+                  {% if user.is_authenticated %}
                   <li>
-                    <a href="#features-section" class="nav-link">Features</a>
+                    <a href="{% url 'logout'%}" class="nav-link">Logout</a>
                   </li>
+                  <li>
+                    <a href="{% url 'profile'%}" class="nav-link">profile</a>
+                  </li>
+                  {% else %}
+                  <li>
+                    <a href="{% url 'login'%}" class="nav-link">Login</a>
+                  </li>
+                  <li>
+                    <a href="{% url 'register'%}" class="nav-link">Register</a>
+                  </li>
+                  {% endif %}
+
                   <li class="has-children">
                     <a href="#about-section" class="nav-link">About Us</a>
                     <ul class="dropdown arrow-top">
