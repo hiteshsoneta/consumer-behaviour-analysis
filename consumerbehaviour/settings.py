@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'nearestneighbors',
     'users.apps.UsersConfig',
     'polls',
     'crispy_forms',
