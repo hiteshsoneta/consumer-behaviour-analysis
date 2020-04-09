@@ -1,0 +1,48 @@
+{% extends "polls/sidebar.html" %}
+{% load static %}
+{% block content %}
+
+<br><br>
+<div class="col-lg-2"></div>
+  <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <strong>Apriori Form</strong> 
+            </div>
+            {% if messages %}
+                {% for message in messages %}
+                    <div>
+                        <strong>{{message|safe}}</strong>
+                    </div>
+                {% endfor %}
+            {% else %}
+            <!-- {{order}} -->
+            <div class="card-body card-block">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row form-group">
+                        <div class="col col-md-3"><label for="file-input" class=" form-control-label">Upload a file</label></div>
+                        <div class="col-12 col-md-9"><input type="file" name="file" class="form-control-file"><small class="form-text text-muted">Only accepts CSV file</small></div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-3"><label for="text-input" class=" form-control-label">Support</label></div>
+                        <div class="col-12 col-md-9"><input type="text" name="support" placeholder="Provide the minimum support" class="form-control"></div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-3"><label for="text-input" class=" form-control-label">Confidence</label></div>
+                        <div class="col-12 col-md-9"><input type="text" name="confidence" placeholder="Provide the minimum confidence" class="form-control"></div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col col-md-3"><label for="text-input" class=" form-control-label">Lift</label></div>
+                        <div class="col-12 col-md-9"><input type="text" name="lift" placeholder="Provide the minimum lift" class="form-control"></div>
+                    </div>
+                    <button type="submit" align="center" class="btn btn-primary">Upload</button>
+                </form>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-lg-2"></div>
+
+
+{% endblock %}

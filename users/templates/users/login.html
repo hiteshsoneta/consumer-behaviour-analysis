@@ -1,27 +1,42 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title></title>
-  </head>
-  <body>
-    {% load crispy_forms_tags %}
-    <div class="content-section">
-      <form method="POST">
-        {% csrf_token %}
-        <fieldset class="form-group">
-          <legend class="border-bottom mb-4">Login</legend>
-          {{form|crispy}}
-        </fieldset>
-        <div class="form-group">
-          <button class="btn btn-outline-info" type="submit ">Login</button>
+{% extends "polls/navbar.html" %}
+{% load static %}
+{% block content %}
+  <div class="site-section bg-image2 overlay" id="contact-section">
+    <div class="container">
+      <br><br>
+         <!--  <div class="row mb-5">
+              <div class="col-12 text-center">
+                <h2 class="section-title mb-3 text-white">Register</h2>
+              </div>
+          </div> -->
+        <div class="row justify-content-center">
+          <div class="col-lg-7 mb-5">
+
+            {% load crispy_forms_tags %}
+          
+            <form method="POST" class="p-5 bg-white">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                  <legend class="border-bottom mb-4">Login</legend>
+                  {{form|crispy}}
+                </fieldset>
+                <div class="form-group">
+                  <button class="btn btn-primary mr-2 mb-2" type="submit ">Login</button>
+                </div>
+                <div class="border-top pt-3">
+                  <small class="text-muted">
+                    Need an Account?
+                    <a class="ml-2" href="{% url 'register' %}">Sign Up</a>
+                  </small>
+                </div>
+            </form>
+
+          
+          </div>
         </div>
-      </form>
-      <div class="border-top pt-3">
-        <small class="text-muted">
-          Need an Account?
-          <a class="ml-2" href="{% url 'register' % }">Sign Up</a>
-        </small>
-      </div>
     </div>
-  </body>
-</html>
+  </div>
+  
+
+
+ {% endblock %}

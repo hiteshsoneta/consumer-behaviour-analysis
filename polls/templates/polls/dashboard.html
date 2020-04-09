@@ -1,0 +1,181 @@
+{% extends "polls/sidebar.html" %}
+{% load static %}
+{% block content %}
+
+ 
+
+		<div class="breadcrumbs">
+            <div class="col-sm-4">
+                <div class="page-header float-left">
+                    <div class="page-title">
+                        <h1>Dashboard</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="page-header float-right">
+                    <div class="page-title">
+                        <ol class="breadcrumb text-right">
+                            <li class="active">Dashboard</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+		</div>
+
+        <div class="content mt-3">
+
+        	<div class="col-xl-3 col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="stat-widget-one">
+                            <div class="stat-icon dib"><i class="ti-user text-primary border-primary"></i></div>
+                            <div class="stat-content dib">
+                                <div class="stat-text">New Customer</div>
+                                <div class="stat-digit">961</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="stat-widget-one">
+                            <div class="stat-icon dib"><i class="ti-layout-grid2 text-warning border-warning"></i></div>
+                            <div class="stat-content dib">
+                                <div class="stat-text">Active Projects</div>
+                                <div class="stat-digit">770</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="stat-widget-one">
+                            <div class="stat-icon dib"><i class="ti-user text-primary border-primary"></i></div>
+                            <div class="stat-content dib">
+                                <div class="stat-text">New Customer</div>
+                                <div class="stat-digit">961</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="stat-widget-one">
+                            <div class="stat-icon dib"><i class="ti-layout-grid2 text-warning border-warning"></i></div>
+                            <div class="stat-content dib">
+                                <div class="stat-text">Active Projects</div>
+                                <div class="stat-digit">770</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+           <div class="col-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="clearfix">
+                    <i class="fa fa-cogs bg-flat-color-5 p-3 font-2xl mr-3 float-left text-light"></i>
+                    <div class="h5 text-secondary mb-0 mt-1">Data Visualization</div>
+                    <!-- <div class="text-muted text-uppercase font-weight-bold font-xs small">Income</div> -->
+                </div>
+                <div class="b-b-1 pt-3"></div>
+                <hr>
+                <div class="more-info pt-2" style="margin-bottom:-10px;">
+                    <a class="font-weight-bold font-xs btn-block text-muted small" href="#">View More <i class="fa fa-angle-right float-right font-lg"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/.col-->
+    <div class="col-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="clearfix">
+                    <i class="fa fa-laptop bg-info p-3 font-2xl mr-3 float-left text-light"></i>
+                    <div class="h5 text-secondary mb-0 mt-1">Sentiment Analysis</div>
+                    <!-- <div class="text-muted text-uppercase font-weight-bold font-xs small">Income</div> -->
+                </div>
+                <div class="b-b-1 pt-3"></div>
+                <hr>
+                <div class="more-info pt-2" style="margin-bottom:-10px;">
+                    <a class="font-weight-bold font-xs btn-block text-muted small" href="#">View More <i class="fa fa-angle-right float-right font-lg"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/.col-->
+    <div class="col-6 col-lg-3">
+        <div class="card">
+            <div class="card-body">
+                <div class="clearfix">
+                    <i class="fa fa-moon-o bg-warning p-3 font-2xl mr-3 float-left text-light"></i>
+                    <div class="h5 text-secondary mb-0 mt-1">Recommender Systems</div>
+                    <!-- <div class="text-muted text-uppercase font-weight-bold font-xs small">Income</div> -->
+                </div>
+                <div class="b-b-1 pt-3"></div>
+                <hr>
+                <div class="more-info pt-2" style="margin-bottom:-10px;">
+                    <a class="font-weight-bold font-xs btn-block text-muted small" href="#">View More <i class="fa fa-angle-right float-right font-lg"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+            <!--/.col-->
+
+        
+
+            <div class="col-lg-4 col-md-6">
+        		<div class="card">
+            		<div class="card-header">
+                		<strong class="card-title mb-3">Profile Card</strong>
+            		</div>
+            	<div class="card-body">
+                	<div class="mx-auto d-block">
+                    	<img class="rounded-circle mx-auto d-block" width="200px" height="200px" src="{{user.profile.image.url}}" alt="Card image cap">
+                    	<h5 class="text-sm-center mt-2 mb-1">{{user.username}}</h5>
+                    	<div class="location text-sm-center">{{user.email}}</div>
+                	</div>
+                	<hr>
+	                <div class="card-text text-sm-center">
+	                    <a href="#"><i class="fa fa-facebook pr-1"></i></a>
+	                    <a href="#"><i class="fa fa-twitter pr-1"></i></a>
+	                    <a href="#"><i class="fa fa-linkedin pr-1"></i></a>
+	                    <a href="#"><i class="fa fa-pinterest pr-1"></i></a>
+	                </div>
+            	</div>
+        		</div>
+   			 </div>
+
+            
+
+        <!--     <div class="col-xl-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>World</h4>
+                    </div>
+                    <div class="Vector-map-js">
+                        <div id="vmap" class="vmap" style="height: 265px;"></div>
+                    </div>
+                </div> -->
+                <!-- /# card -->
+            <!-- </div> -->
+
+
+        </div> <!-- .content -->
+    </div><!-- /#right-panel -->
+
+
+{% endblock %}

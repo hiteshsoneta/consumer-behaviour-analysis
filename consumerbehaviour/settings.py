@@ -27,11 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
-    'nearestneighbors',
     'users.apps.UsersConfig',
     'polls',
     'crispy_forms',
@@ -41,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'apriori'
 ]
 
 MIDDLEWARE = [
@@ -126,6 +125,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-LOGIN_REDIRECT_URL = 'index'
+LOGIN_REDIRECT_URL = 'dashboard'
 LOGIN_URL = 'login'
+LOGOUT_REDIRECT_URL = 'index'
 #AUTH_PROFILE_MODULE = 'user.Profile'
