@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from .forms import UserRegisterForm, ProfileUpdateForm, UserUpdateForm, prodidForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from .models import Profile
 from .models import City
 from .models import Country
@@ -12,7 +12,8 @@ import io
 import pickle
 from django.db.models import Sum
 from django.http import JsonResponse
-
+from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -21,12 +22,42 @@ from consumerbehaviour import settings
 import os
 # Create your views here.
 from django.conf.urls.static import static
-
+import seaborn as sns
 import shutil
 from django.urls import reverse
+import regex as re
+from wordcloud import WordCloud, STOPWORDS
 
-# Create your views here.
+import threading
 
+@login_required
+def enterprodid(request):
+    if request.method == 'POST':
+        form = prodidForm(request.POST)
+
+        if form.is_valid():
+            prod_id = form.cleaned_data.get('prodid')
+
+            # return render(request, 'users/distprod.html', {'img_src': reverse('distprod', kwargs={'prod_id': prod_id})})
+            return redirect('distprod', prod_id)
+    else:
+        form = prodidForm()
+    return render(request, 'users/prodid.html', {'form': form})
+
+
+@login_required
+def enteruserid(request):
+    if request.method == 'POST':
+        form = prodidForm(request.POST)
+
+        if form.is_valid():
+            prod_id = form.cleaned_data.get('prodid')
+
+            # return render(request, 'users/distprod.html', {'img_src': reverse('distprod', kwargs={'prod_id': prod_id})})
+            return redirect('distcust', prod_id)
+    else:
+        form = prodidForm()
+    return render(request, 'users/cust.html', {'form': form})
 
 
 def register(request):
@@ -56,7 +87,7 @@ def profile(request):
         if u_form.is_valid() and p_form.is_valid():
             u_form.save()
             p_form.save()
-            #messages.success(request, f'Your Account has been updated')
+            messages.success(request, f'Your Account has been updated')
             return redirect('profile')
     else:
         u_form = UserUpdateForm(instance=request.user)
@@ -68,73 +99,21 @@ def profile(request):
     }
     return render(request, 'users/profile.html', context)
 
-@login_required
-def country(request):
-    template = 'country.html'
-    if request.method == "GET":
-        return render(request, template)
-    csv_file = request.FILES['file']
-    if not csv_file.name.endswith('.csv'):
-        messages.error(
-            request, 'not a csv file,please enter a csv file to continue..')
-    data_set = csv_file.read().decode('UTF-8')
-    io_string = io.StringIO(data_set)
-    next(io_string)
-    for column in csv.reader(io_string, delimiter=',', quotechar='|'):
-        created = Country.objects.update_or_create(
-            name=column[0],
-        )
-    context = {}
-    return render(request, template, context)
 
 
-@login_required
-def city(request):
-    template = 'city.html'
-    if request.method == "GET":
-        return render(request, template)
-    csv_file = request.FILES['file']
 
-    if not csv_file.name.endswith('.csv'):
+def pie_chart(prod_id):
 
-        messages.error(
-            request, 'not a csv file,please enter a csv file to continue..')
-
-    data_set = csv_file.read().decode('UTF-8')
-    io_string = io.StringIO(data_set)
-    next(io_string)
-    for column in csv.reader(io_string, delimiter=',', quotechar='|'):
-        created = City.objects.update_or_create(
-            name=column[0],
-            country=column[1],
-            population=column[2],
-        )
-    context = {}
-    return render(request, template, context)
-
-
-def pie_chart(request):
-
-    data = dict()
-    file = open('C:\\Users\\juyee\\Envs\\beproject1\\consumer-behaviour-analysis\\users\\static\\users\\file', 'rb')
-    dat = pickle.load(file)
-
-    for key in dat.keys():
-        data.update({
-            key: dat[key]
-        })
-
+    
+    file = open(
+        'C:\\Users\\juyee\\Envs\\beproject1\\consumer-behaviour-analysis\\bingo', 'rb')
+    data = pickle.load(file)
+    rating_perperson = data.reviewerID.value_counts()
+    rating_perperson.value_counts().plot(
+        kind='pie', figsize=(10, 10), title='Ratings Per User')
+    plt.savefig(os.path.join(settings.BASE_DIR, "media", prod_id + ".png"))
     file.close()
 
-    # queryset = City.objects.order_by('-population')[:5]
-    # for city in queryset:
-    #     labels.append(city.name)
-    #     data.append(city.population)
-
-    return render(request, 'users/pie_chart.html', {
-        'labels': list(data.keys())[:50],
-        'data': list(data.values())[:50],
-    })
 
 
 def home(request):
@@ -145,7 +124,8 @@ def home(request):
 def population_chart(request):
 
     data = dict()
-    file = open('C:\\Users\\juyee\\Envs\\beproject1\\consumer-behaviour-analysis\\users\\static\\users\\file', 'rb')
+    file = open(
+        'C:\\Users\\juyee\\Envs\\beproject1\\consumer-behaviour-analysis\\users\\static\\users\\file', 'rb')
     dat = pickle.load(file)
 
     for key in dat.keys():
@@ -164,63 +144,68 @@ def population_chart(request):
     })
 
 
-def countrating1(request):
-    return render(request, 'users/countrating1.html')
-
-
-def countrating(request):
-
-    data = dict()
+def heatmap(prod_id):
     file = open(
-        'C:\\Users\\juyee\\Envs\\beproject1\\consumer-behaviour-analysis\\users\\static\\users\\file1', 'rb')
-    dat = pickle.load(file)
+        'C:\\Users\\juyee\\Envs\\beproject1\\consumer-behaviour-analysis\\bingo', 'rb')
+    reviews = pickle.load(file)
+    df_s = reviews.groupby(['overall', '% Upvote']).agg({'Id': 'count'})
+    df_s = df_s.unstack()
+    df_s.columns = df_s.columns.get_level_values(1)
+    fig = plt.figure(figsize=(15,10))
 
-    for key in dat.keys():
-        data.update({
-            key: dat[key]
-        })
+    sns.heatmap(df_s[df_s.columns[::-1]].T, cmap = 'YlGnBu', linewidths=.5, annot = True, fmt = 'd', cbar_kws={'label': '# reviews'})
+    plt.yticks(rotation=0)
+    plt.title('How helpful users find among the user scores')
 
-    file.close()
-
-    labels = list(map(lambda x: int(x), list(data.keys())))
-    data = list(map(lambda x: int(x), list(data.values())))
-
-    return JsonResponse(data={
-        'labels': labels,
-        'data': data,
-    })
-
-
-def countrating2(request):
-    return render(request, 'users/countrating2.html')
-
-
-def cntrating(request):
-
-    data = dict()
-    file = open('C:\\Users\\juyee\\Envs\\beproject1\\consumer-behaviour-analysis\\users\\static\\users\\file2', 'rb')
-    dat = pickle.load(file)
-
-    for key in dat.keys():
-        data.update({
-            key: dat[key]
-        })
+    plt.savefig(os.path.join(settings.BASE_DIR, "media", prod_id + ".png"))
 
     file.close()
 
-    labels = list(data.keys())
-    data = list(map(lambda x: int(x), list(data.values())))
-
-    return JsonResponse(data={
-        'labels': labels,
-        'data': data,
-    })
 
 
+
+def countrating1(prod_id):
+    #prod_id = 'abcdfghij'
+    # file = open(
+    #     'C:\\Users\\Hitesh\\Documents\\BE\\Consumer-Behaviour-Analysis\\users\\static\\users\\check', 'rb')
+    file = open(
+        'C:\\Users\\juyee\\Envs\\beproject1\\consumer-behaviour-analysis\\bingo', 'rb')
+    data = pickle.load(file)
+    review=pd.DataFrame(data.groupby('overall').size().sort_values(ascending=False).rename('No of Users').reset_index())
+    plt.figure(figsize=(10, 5))
+    sns.countplot(data['overall'])
+    plt.title('Count ratings')
+    
+
+    plt.savefig(os.path.join(settings.BASE_DIR, "media", prod_id + ".png"))
+
+    file.close()
+
+    
+
+
+def countrating2(prod_id):
+
+    #prod_id = 'abcde'
+    # file = open(
+    #     'C:\\Users\\Hitesh\\Documents\\BE\\Consumer-Behaviour-Analysis\\users\\static\\users\\check', 'rb')
+    file = open(
+        'C:\\Users\\juyee\\Envs\\beproject1\\consumer-behaviour-analysis\\bingo', 'rb')
+    data = pickle.load(file)
+    plt.figure(figsize=(10, 5))
+    sns.countplot(data['% Upvote'])
+    plt.title('Count Helpful %')
+
+    plt.savefig(os.path.join(settings.BASE_DIR, "media", prod_id + ".png"))
+
+    file.close()
+
+   
+
+
+@login_required
 def distprod(request, prod_id):
-    # data = dict()
-    file = open(
-        'C:\\Users\\juyee\\Envs\\beproject1\\consumer-behaviour-analysis\\users\\static\\users\\file3', 'rb')
+    file = open('C:\\Users\\juyee\\Envs\\beproject1\\consumer-behaviour-analysis\\bingo', 'rb')
     dat = pickle.load(file)
 
     df_1prod = dat[dat['asin'] == prod_id]['overall']
@@ -235,12 +220,11 @@ def distprod(request, prod_id):
         'img_src': settings.MEDIA_URL + "/{}.png".format(prod_id)
     })
 
-
+@login_required
 def distcust(request, cust_id):
-    # DELETE ALL THE FILES IN THE MEDIA_ROOT FOLDER
-    # user_id = "A1IU7S4HCK1XK0"
+   
     file = open(
-        'C:\\Users\\juyee\\Envs\\beproject1\\consumer-behaviour-analysis\\users\\static\\users\\file4', 'rb')
+        'C:\\Users\\juyee\\Envs\\beproject1\\consumer-behaviour-analysis\\bingo', 'rb')
     dat = pickle.load(file)
 
     df_1user = dat[dat['reviewerID'] == cust_id]['overall']
@@ -256,33 +240,63 @@ def distcust(request, cust_id):
         'img_src': settings.MEDIA_URL + "/{}.png".format(cust_id)
     })
 
-def enterprodid(request):
-    if request.method == 'POST':
-        form = prodidForm(request.POST)
+@login_required
+def create_image(request):
+    p1 = 'abc'
+    p2 = 'abcd'
+    p3 = 'abcde'
+    p5='heatmapimg'
+    pie_chart(p1)
+    countrating1(p2)
+    countrating2(p3)
+    heatmap(p5)
+    return render(request, 'users/createimage.html', {
+        'img_src1': settings.MEDIA_URL + "/{}.png".format(p1),
+        'img_src2': settings.MEDIA_URL + "/{}.png".format(p2),
+        'img_src3': settings.MEDIA_URL + "/{}.png".format(p3),
+        'img_src4': settings.MEDIA_URL + "/{}.png".format(p5),
 
-        if form.is_valid():
-            prod_id = form.cleaned_data.get('prodid')
-
-            # return render(request, 'users/distprod.html', {'img_src': reverse('distprod', kwargs={'prod_id': prod_id})})
-            return redirect('distprod', prod_id)
-    else:
-        form = prodidForm()
-    return render(request, 'users/prodid.html', {'form': form})
-
-
-def enteruserid(request):
-
-    if request.method == 'POST':
-        form = prodidForm(request.POST)
-        if form.is_valid():
-            prod_id = form.cleaned_data.get('prodid')
-
-            # return render(request, 'users/distprod.html', {'img_src': reverse('distprod', kwargs={'prod_id': prod_id})})
-            return redirect('distcust', prod_id)
-    else:
-        form = prodidForm()
-
-    return render(request, 'users/cust.html', {'form': form})
+    })
 
 
+@login_required
+def dataset_upload(request):
+    template = "users/upload.html"
 
+    prompt = {
+        'order': 'Upload the dataset'
+    }  # summary clean (reviews) and overall (ratings)
+
+    if request.method == 'GET':
+        return render(request, template, prompt)
+
+    json_file = request.FILES['file']
+
+    if not json_file.name.endswith('.json'):
+        messages.error(request, 'This is not a json file')
+
+    prodreview = pd.read_json(io.StringIO(
+        json_file.read().decode('utf-8')), lines=True)
+
+    return format(request,prodreview)
+
+
+def format(request,prodreview):
+    reviews = prodreview
+    reviews[['HelpfulnessNumerator', 'HelpfulnessDenominator']] = pd.DataFrame(
+        reviews.helpful.values.tolist(), index=reviews.index)
+    reviews.drop_duplicates(
+        subset=['reviewerID', 'asin', 'unixReviewTime'], inplace=True)
+
+    reviews['Helpful %'] = np.where(reviews['HelpfulnessDenominator'] > 0,
+                                    reviews['HelpfulnessNumerator'] / reviews['HelpfulnessDenominator'], -1)
+    reviews['% Upvote'] = pd.cut(reviews['Helpful %'], bins=[-1, 0, 0.2, 0.4, 0.6, 0.8, 1.0], labels=[
+                                 'Empty', '0-20%', '20-40%', '40-60%', '60-80%', '80-100%'], include_lowest=True)
+    reviews['Id'] = reviews.index
+
+    import pickle
+    file = open('bingo', 'ab')
+
+    pickle.dump(reviews, file)
+    file.close()
+    return HttpResponseRedirect('/createimage')

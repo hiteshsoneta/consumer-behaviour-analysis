@@ -8,7 +8,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>imagine Dashboard</title>
+    <title>envision Dashboard</title>
     <meta name="description" content="Sufee Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -49,8 +49,8 @@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-menu" aria-controls="main-menu" aria-expanded="false" aria-label="Toggle navigation">
                     <i class="fa fa-bars"></i>
                 </button>
-                <a class="navbar-brand" href="./"><img src="{% static 'assets/images/logo.png' %}" alt="Logo"></a>
-                <a class="navbar-brand hidden" href="./"><img src="{% static 'assets/images/logo2.png' %}" alt="Logo"></a>
+                <a class="navbar-brand" href="{% url 'dashboard' %}">envision</a>
+                <a class="navbar-brand hidden" href="{% url 'dashboard' %}"><img src="{% static 'assets/images/e_logo.png' %}" alt="Logo"></a>
             </div>
 
             <div id="main-menu" class="main-menu collapse navbar-collapse">
@@ -60,7 +60,7 @@
                     </li>
                     <h3 class="menu-title">Elements</h3><!-- /.menu-title -->
                     <li class="menu-item-has-children">
-                        <a href="#" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-bar-chart-o"></i>Data Visualization</a>
+                        <a href="{% url 'upload-file' %}" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-bar-chart-o"></i>Data Visualization</a>
                         
                     </li>
                     <li class="menu-item-has-children dropdown">
@@ -68,8 +68,12 @@
                         
                     </li>
                     <li class="menu-item-has-children dropdown">
-                        <a href="{% url 'trans_upload' %}" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-laptop"></i>Recommender System</a>
+                        <a href="{% url 'trans_upload' %}" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-laptop"></i>Apriori Recommender</a>
                     </li>
+
+                    <!-- <li class="menu-item-has-children dropdown">
+                        <a href="{% url 'rbm' %}" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-laptop"></i>Boltzmann Machine</a>
+                    </li> -->
 
                     <li class="menu-item-has-children dropdown">
                         <a href="{% url 'profile' %}" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-user"></i>Update Profile</a>
@@ -126,7 +130,7 @@
                             </div>
                         </div> -->
 
-                        <div class="dropdown for-message">
+                        <!-- <div class="dropdown for-message">
                             <button class="btn btn-secondary dropdown-toggle" type="button"
                                 id="message"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -168,7 +172,7 @@
                                 </span>
                             </a>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
 

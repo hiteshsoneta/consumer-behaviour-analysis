@@ -1,0 +1,49 @@
+{% extends "polls/sidebar.html" %}
+{% load static %}
+{% block content %}
+
+<br><br>
+<div class="col-lg-2"></div>
+  <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <strong>Data Visualization</strong> 
+            </div>
+            {% if messages %}
+                {% for message in messages %}
+                    <div>
+                        <strong>{{message|safe}}</strong>
+                    </div>
+                {% endfor %}
+            {% else %}
+            <div class="card-body card-block">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row form-group">
+                        <div class="col col-md-3"><label for="file-input" class=" form-control-label">Upload a file</label></div>
+                        <div class="col-12 col-md-9"><input type="file" name="file" class="form-control-file" required><small class="form-text text-muted">Only accepts JSON file</small></div>
+                    </div>
+                   
+                    <button type="submit" align="center" class="btn btn-primary" onclick="showDiv()">Upload</button>
+                </form>
+            </div>
+            {% endif %}
+            <!-- <<div id="visualization" class="card-header card-block">
+            <div><a class="ml-2" href="{%url 'create_image'%}">go to visualization page</a></div>
+        	</div>  -->
+        </div>
+    </div>
+ <div class="col-lg-2"></div>
+
+
+
+<script>
+	function showDiv() {
+		document.getElementById('visualization').style.display="block";
+	}
+
+</script>
+
+
+
+{% endblock %}

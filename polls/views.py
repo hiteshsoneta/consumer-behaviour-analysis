@@ -178,6 +178,8 @@ def userfields(request):
 				#print(sentiment_analysis(text))
 				messages.success(request,'The sentiment of this review is: {}'.format(answer))
 
+				
+
 	form=ReviewForm()
 				
 	return render(request, 'polls/forms.html', {'form':form})

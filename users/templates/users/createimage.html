@@ -1,0 +1,106 @@
+{% extends "polls/sidebar.html" %}
+{% load static %}
+{% block content %}
+
+  <div class="breadcrumbs">
+            <div class="col-sm-4">
+                <div class="page-header float-left">
+                    <div class="page-title">
+                        <h1>Data Visualization</h1>
+                    </div>
+                </div>
+            </div>
+           
+    </div>
+
+    <div class="content mt-3">
+      <div class = "row">
+
+         <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                  <h4 class="mb-3">Rating distribution of the product reviews </h4>
+                   <img src="{{ img_src2 }}" alt="Plot image" width="500" height="400" />
+                  <!-- <img src="{{ img_src1 }}" alt="Plot image" width="500" height="500" /> -->
+              </div>
+            </div>
+          </div>
+
+           <div class="col-lg-6">
+              <div class="card">
+                  <div class="card-body">
+                    <h4 class="mb-3">Upvote distribution of the product reviews</h4>
+                    <img src="{{ img_src3 }}" alt="Plot image" width="500" height="400" />
+                  </div>
+              </div>
+          </div>
+        
+    </div>
+
+     <div class = "row">
+
+      <div class="col-lg-6">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="mb-3">Bulk Ratings distribution </h4>
+               <img src="{{ img_src1 }}" alt="Plot image" width="500" height="500" />
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+
+          <div class="card">
+            <div class="card-header">
+              <p>Find out the average ratings received by a particular product</p>
+            </div>
+            <div class="card-body">
+             <a class="ml-2" href="{%url 'enterprodid'%}">Click for Product Insights</a>
+            <!-- <a class="ml-2" href="{%url 'entercustid'%}">review a customer</a> -->
+            </div>
+          </div>
+
+          <div class="col-lg-12">
+            <div class="card-header">
+              <p>Find out the average ratings given by a particular customer</p>
+            </div>
+            <div class="card">
+              <div class="card-body">
+                <a class="ml-2" href="{%url 'entercustid'%}">Click for Customer Insights</a>
+              </div>
+          </div>
+          </div>
+
+           <div class="col-lg-12">
+          
+            <div class="card">
+              <div class="card-body">
+               <p>Data visualization is a great way to gain insights about your data</p>
+              </div>
+          </div>
+          </div>
+
+      </div>
+
+      </div>
+
+      <div class="row">
+          <div class="col-lg-12">
+          <div class="card">
+            <div class="card-body">
+                 <h4 class="mb-3">Heatmap of Rating Distribution </h4>
+               <img src="{{ img_src4 }}" alt="Plot image" width="1000" height="600" />
+             </div>
+          </div>
+        </div>
+
+
+      </div>
+      
+
+
+    </div>
+ 
+
+
+ {% endblock %}

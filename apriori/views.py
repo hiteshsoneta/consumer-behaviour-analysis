@@ -138,27 +138,14 @@ def reco(unit,support,confidence,lift):
         AprioriResults = pd.DataFrame.join(apriori_summary,name_df,how='left')
 
         
-        #print(type(AprioriResults_csv)) #string
-
         
-        #with open('apriori.html', 'w') as fo:
-         #   fo.write(AprioriResults.to_html())
-
-       # AprioriResults_csv = AprioriResults.to_html()
-
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="apriorisummary.csv"'
+        path = "C:\\Users\\juyee\\Envs\\beproject1\\consumer-behaviour-analysis"
         AprioriResults.to_csv(path_or_buf=response,float_format='%.4f',index=False)
         return response
 
-        #<a  href="D:\Anaconda3\envs\gputest\BE proj\AprioriResults" download> Download Document </a>
-        #download_csv(AprioriResults)
-
-        #return render(request,'apriori.html')
-        #return HttpResponse(AprioriResults_csv)
-
-        
-        #return download_csv(AprioriResults)
+       
 
     except ValueError as e:
         return (e.args[0])

@@ -1,22 +1,35 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title></title>
-  </head>
-  <body>
-    {% load crispy_forms_tags %}
-    <div class="content-section">
-      <form method="POST">
-        {% csrf_token %}
-        <fieldset class="form-group">
-          <legend class="border-bottom mb-4">product id</legend>
-          {{form|crispy}}
-        </fieldset>
+{% extends "polls/sidebar.html" %}
+{% load static %}
+{% block content %}
 
-        <div class="form-group">
-          <button class="btn btn-outline-info" type="submit ">submit</button>
+<br><br>
+
+<div class="col-lg-2"></div>
+<div class="col-lg-8">
+  <div class="card">
+
+        {% load crispy_forms_tags %}
+        <div class="card-body card-block">
+          <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+              <legend class="border-bottom mb-4">Enter product ID</legend>
+              {{form|crispy}}
+            </fieldset>
+
+            <div class="form-group">
+              <button class="btn btn-primary mr-2 mb-2" type="submit ">submit</button>
+            </div>
+          </form>
         </div>
-      </form>
     </div>
-  </body>
-</html>
+  </div>
+
+<div class="col-lg-2"></div>
+
+
+{% endblock %}
+ 
+
+
+
